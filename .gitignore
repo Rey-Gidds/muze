@@ -1,2 +1,4 @@
 tracks_features.csv
 cleaned_tracks_features.csv
+.env
+RecommendationPipeline/config.py
