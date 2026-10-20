@@ -1,0 +1,25 @@
+[query_service] Initializing MuzeRecommendationEngine...
+[index_manager] Loading vector index from C:\Users\REYANSH\OneDrive\Desktop\muze\tracks_index.usearch...
+[index_manager] Loaded index containing 1204025 vectors.
+[query_service] Recommendation engine ready.
+Track ID: 4hPZZgVyppMO8qFkq9HyYJ, Vector ID: 542668, Distance: 0.003332793712615967
+Track ID: 3CSaBMhraUanm1ofUJXakB, Vector ID: 881323, Distance: 0.0036082863807678223
+Track ID: 1KIIw4nqAAvFtfCXPiPacC, Vector ID: 504653, Distance: 0.0038844943046569824
+Track ID: 2eltMJqLdM127o4nPkRs87, Vector ID: 575969, Distance: 0.003901541233062744
+Track ID: 7BhbxVV8F55B4vwMThf2EJ, Vector ID: 1201682, Distance: 0.004191875457763672
+Track ID: 4nNClQujAhJ7QduvFjnidc, Vector ID: 178519, Distance: 0.004337787628173828
+Track ID: 2LzgaDa5QrmlcTJ8OUfSyJ, Vector ID: 1009481, Distance: 0.004369258880615234
+Track ID: 12Y0cQE1VPmu2BLmDWyCn1, Vector ID: 241196, Distance: 0.0048539042472839355
+Track ID: 6GdvJITgctG2W6YARRQrAO, Vector ID: 807506, Distance: 0.005278408527374268
+Track ID: 5dKhzRi6gYz98cmgfvpuWe, Vector ID: 633536, Distance: 0.005604743957519531
+Track ID: 4rf2t2tqlsiMF6aHJzBN4e, Vector ID: 1201587, Distance: 0.005631387233734131
+Track ID: 2ukhWPQZ1hoFIoGnXHGF0b, Vector ID: 352931, Distance: 0.005663573741912842
+Track ID: 33Z2FvYqs16Tsx16m3V7Pu, Vector ID: 454633, Distance: 0.005880892276763916
+Track ID: 5Bups40NzNgKIqIe9i1XiR, Vector ID: 46318, Distance: 0.005893230438232422
+Track ID: 5rHsZP1GkS5SSYOGVzBNMz, Vector ID: 840238, Distance: 0.005981147289276123
+Track ID: 4gA8RYIv4IG31JqKUM0QnW, Vector ID: 1107137, Distance: 0.00615006685256958
+Track ID: 2OeEddxMOykAHyFpLnwnJd, Vector ID: 669938, Distance: 0.006306946277618408
+Track ID: 6Co7Y7daDxkf2sKd1hBwf2, Vector ID: 1120720, Distance: 0.006359279155731201
+Track ID: 3XzeFkPjPXh1MmeDIyIsFG, Vector ID: 140632, Distance: 0.00639873743057251
+Track ID: 7es79G4b4toPBIFlAulJOF, Vector ID: 945257, Distance: 0.006431400775909424
+Time taken: 0.0008032321929931641 seconds (That's Fast !!!!!)
