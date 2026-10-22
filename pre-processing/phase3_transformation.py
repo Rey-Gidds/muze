@@ -43,16 +43,15 @@ def preprocess():
     print("Scaler saved successfully.")
 
     # 4. Construct feature matrix for L2 normalization:
-    # scaled_stats (9 cols) + mode (1 col) + key_sin (1 col) + key_cos (1 col) = 11 dimensions
-    continuous_mode_key_cols = STATS_COLS_TO_SCALE + ["mode", "key_sin", "key_cos"]
+    # scaled_stats (9 cols) + mode (1 col) = 10 dimensions
+    # Note: key_sin and key_cos are preserved as-is and not L2-normalized.
+    continuous_mode_cols = STATS_COLS_TO_SCALE + ["mode"]
     raw_feature_matrix = np.column_stack([
         scaled_stats,
-        df["mode"].to_numpy(dtype=np.float32),
-        key_sin.to_numpy(dtype=np.float32),
-        key_cos.to_numpy(dtype=np.float32)
+        df["mode"].to_numpy(dtype=np.float32)
     ])
 
-    print("Applying L2 normalization to musical feature vectors...")
+    print("Applying L2 normalization to musical feature vectors (excluding key_sin and key_cos)...")
     l2_normalized_vectors = normalize(raw_feature_matrix, norm="l2", axis=1)
 
     # 5. One-hot encode 'time_signature' (discrete values)
@@ -73,7 +72,7 @@ def preprocess():
     df_copy["key_cos"] = key_cos
 
     # Add L2 normalized columns
-    for i, col in enumerate(continuous_mode_key_cols):
+    for i, col in enumerate(continuous_mode_cols):
         df_copy[f"{col}_l2"] = l2_normalized_vectors[:, i]
 
     # Append one-hot encoded time_signature columns (not standardized, not L2 normalized)
