@@ -9,3 +9,5 @@ scaler.joblib
 tracks_index.usearch
 tracks_mapping.parquet
 tracks_metadata.parquet
+fai_layer_flow.txt
+fai_theory_and_viva_guide.txt
