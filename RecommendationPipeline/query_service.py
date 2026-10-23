@@ -69,12 +69,13 @@ class MuzeRecommendationEngine:
         return recommendations
 
 
-recommendor = MuzeRecommendationEngine()
-track_id = "2LXPNLSMAauNJfnC58lSqY"
-start = time.time()
-recommendations = recommendor.recommend_by_track_id(track_id, top_k=20)
-end = time.time()
-for obj in recommendations:
-    print(f"Track ID: {obj['track_id']}, Vector ID: {obj['vector_id']}, Distance: {obj['distance']}")
+if __name__ == "__main__":
+    recommendor = MuzeRecommendationEngine()
+    track_id = "2LXPNLSMAauNJfnC58lSqY"
+    start = time.time()
+    recommendations = recommendor.recommend_by_track_id(track_id, top_k=20)
+    end = time.time()
+    for obj in recommendations:
+        print(f"Track ID: {obj['track_id']}, Vector ID: {obj['vector_id']}, Distance: {obj['distance']}")
 
-print(f"Time taken: {end - start} seconds")
+    print(f"Time taken: {end - start} seconds")
