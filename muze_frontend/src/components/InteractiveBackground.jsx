@@ -19,9 +19,9 @@ const InteractiveBackground = () => {
     window.addEventListener('resize', handleResize);
 
     // Particles (acoustic nodes & musical shapes)
-    const particleCount = Math.min(50, Math.floor((width * height) / 2000));
+    const particleCount = Math.min(60, Math.floor((width * height) / 1500));
     const particles = [];
-    const musicSymbols = ['♩', '♪', '♫', '♬', '◎', '◈'];
+    const musicSymbols = ['♩', '♪', '♫', '♬', '◎'];
 
     for (let i = 0; i < particleCount; i++) {
       particles.push({
@@ -31,7 +31,7 @@ const InteractiveBackground = () => {
         vy: (Math.random() - 0.5) * 0.4,
         radius: Math.random() * 2 + 1.5,
         symbol: Math.random() > 0.6 ? musicSymbols[Math.floor(Math.random() * musicSymbols.length)] : null,
-        symbolSize: Math.random() * 18 + 12,
+        symbolSize: Math.random() * 20 + 12,
         opacity: Math.random() * 0.3 + 0.1
       });
     }

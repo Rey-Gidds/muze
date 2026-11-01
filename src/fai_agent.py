@@ -448,7 +448,7 @@ class FAIMusicRecommender:
     def recommend(
         self,
         query_track_id: str,
-        candidate_pool_size: int = 150
+        candidate_pool_size: int = 70
     ) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
         """
         Retrieves candidate_pool_size candidates from ML layer,
