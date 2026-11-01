@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #08090d;
+    color: #e2e8f0;
+    min-height: 100vh;
+  }
+
+  .font-lexend {
+    font-family: 'Lexend', sans-serif;
+  }
+
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+/* Audio wave equalizer keyframes */
+@keyframes waveBar {
+  0%, 100% {
+    height: 6px;
+  }
+  50% {
+    height: 24px;
+  }
+}
+
+.animate-wave-1 {
+  animation: waveBar 0.9s ease-in-out infinite;
+}
+.animate-wave-2 {
+  animation: waveBar 1.2s ease-in-out 0.15s infinite;
+}
+.animate-wave-3 {
+  animation: waveBar 0.8s ease-in-out 0.3s infinite;
+}
+.animate-wave-4 {
+  animation: waveBar 1.1s ease-in-out 0.45s infinite;
+}
+.animate-wave-5 {
+  animation: waveBar 1.0s ease-in-out 0.2s infinite;
+}
