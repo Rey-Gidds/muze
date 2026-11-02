@@ -55,10 +55,8 @@ def calculate_intralist_diversity(vectors: np.ndarray) -> float:
     return float(np.mean(pairwise_distances))
 
 
-def run_evaluation(seed_track_id: str = "2NLLH8KVjVZDKc8NAtE3ok"):
-    print("=" * 70)
+def run_evaluation(seed_track_id: str = "11cxKUEgnVAlesUKt4e3br"):
     print("MUZE MUSIC RECOMMENDATION EVALUATION: ML-ONLY vs ML + FAI AGENT")
-    print("=" * 70)
     print(f"Seed Query Track ID: {seed_track_id}\n")
 
     # Initialize Recommender and Engines
@@ -102,7 +100,7 @@ def run_evaluation(seed_track_id: str = "2NLLH8KVjVZDKc8NAtE3ok"):
     ml_avg_sim = float(np.mean(ml_similarities))
     ml_ild = calculate_intralist_diversity(ml_vectors_arr)
 
-    # 2. EVALUATE ML + FAI AGENT (CANDIDATE POOL 150 -> FINAL 30)
+    # 2. EVALUATE ML + FAI AGENT (CANDIDATE POOL 70 -> FINAL 30)
     t_start = time.perf_counter()
     fai_recs, fai_report = recommender.recommend(seed_track_id, candidate_pool_size=70)
     fai_latency_ms = (time.perf_counter() - t_start) * 1000.0
@@ -172,16 +170,74 @@ def run_evaluation(seed_track_id: str = "2NLLH8KVjVZDKc8NAtE3ok"):
 
     # Print top 5 samples from both approaches
     print("\nSample Top 5 from ML-Only:")
-    for idx, (m, art, sim) in enumerate(zip(ml_matches[:30], ml_artists[:30], ml_similarities[:30]), 1):
+    for idx, (m, art, sim) in enumerate(zip(ml_matches[:5], ml_artists[:5], ml_similarities[:30]), 1):
         title = meta_lookup.get(m["track_id"], {}).get("title", "Unknown")
         print(f"  {idx}. '{title}' - {art} (Sim: {sim:.4f})")
 
     print("\nSample Top 5 from ML + FAI Agent:")
-    for idx, r in enumerate(fai_recs, 1):
+    for idx, r in enumerate(fai_recs[:5], 1):
         print(f"  {idx}. '{r['title']}' - {r['artist']} (Sim: {r['similarity']:.4f}, Score: {r['fai_score']:.4f}, DivDist: {r['diversity_distance']:.4f})")
+
+    # Compute Precision & Recall
+    calculate_precision_and_recall(recommender, seed_track_id=seed_track_id, k=30)
 
     return results_df, (ml_matches, ml_artists), fai_recs
 
 
+def calculate_precision_and_recall(recommender, seed_track_id: str, k: int = 30, similarity_threshold: float = 0.85):
+    """
+    1. Precision@K: Fraction of top-K songs meeting the acoustic similarity threshold.
+    2. ANN Recall@K: Overlap between HNSW index and Exact Dot-Product Brute Force.
+    """
+    ml_engine = recommender.ml_engine
+    target_vec = np.array(ml_engine.track_to_vector[seed_track_id], dtype=np.float32)
+
+    # --- A. Calculate Precision@K for both ML and FAI ---
+    ml_recs = ml_engine.recommend_by_track_id(seed_track_id, top_k=k)
+    fai_recs, _ = recommender.recommend(seed_track_id, candidate_pool_size=70)
+
+    ml_relevant = sum(1 for m in ml_recs if (1.0 - m["distance"]) >= similarity_threshold)
+    fai_relevant = sum(1 for r in fai_recs if r["similarity"] >= similarity_threshold)
+
+    ml_precision = ml_relevant / k
+    fai_precision = fai_relevant / k
+
+    # --- B. Calculate ANN Recall@K (HNSW vs Exact Brute Force on subset/candidates) ---
+    hnsw_ids = set([m["track_id"] for m in ml_recs])
+
+    # To calculate exact ground truth on 1.2M songs:
+    # (Extract dot product against candidates pool or all vectors)
+    all_vectors = np.array(list(ml_engine.track_to_vector.values()), dtype=np.float32)
+    all_ids = list(ml_engine.track_to_vector.keys())
+    
+    # Exact cosine similarities
+    target_norm = target_vec / np.linalg.norm(target_vec)
+    matrix_norms = all_vectors / np.linalg.norm(all_vectors, axis=1, keepdims=True)
+    exact_sims = np.dot(matrix_norms, target_norm)
+    
+    # Exclude seed track itself
+    exact_top_k_indices = np.argsort(exact_sims)[::-1]
+    exact_ids = []
+    for idx in exact_top_k_indices:
+        tid = all_ids[idx]
+        if tid != seed_track_id:
+            exact_ids.append(tid)
+        if len(exact_ids) == k:
+            break
+
+    ann_recall = len(hnsw_ids.intersection(set(exact_ids))) / k
+
+    print(f"--- Precision & Recall Metrics (K={k}) ---")
+    print(f"Acoustic Precision@30 (ML-Only) : {ml_precision * 100:.1f}%")
+    print(f"Acoustic Precision@30 (ML + FAI): {fai_precision * 100:.1f}%")
+    print(f"ANN Search Recall@30 (HNSW Fidelity): {ann_recall * 100:.1f}%")
+
+    return {
+        "ml_precision": ml_precision,
+        "fai_precision": fai_precision,
+        "ann_recall": ann_recall
+    }
+
 if __name__ == "__main__":
     run_evaluation()
+

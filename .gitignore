@@ -16,3 +16,6 @@ RecommendationPipeline/tests/*
 pre-processing/__pycache__
 pre-processing/__pycache__/*
 backend/scripts
+benchmark_matrix_stacking.py
+ml_viva_questions.md
+fai_project_report.txt

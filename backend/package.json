@@ -1,0 +1,34 @@
+{
+  "name": "muze-backend",
+  "version": "1.0.0",
+  "description": "Production-ready, highly modular Node.js backend for Muze music recommendation service",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "upload:r2": "node scripts/uploadToR2.js",
+    "seed:vectors": "node scripts/seedMongoVectors.js",
+    "seed:songs": "node scripts/seedMongoSongs.js"
+  },
+  "keywords": [
+    "music",
+    "recommendation",
+    "usearch",
+    "vector-search",
+    "mongodb",
+    "mongoose",
+    "lru-cache"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.750.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "mongoose": "^8.10.0",
+    "usearch": "^2.16.0"
+  }
+}
