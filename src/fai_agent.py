@@ -32,7 +32,7 @@ class SongCandidate:
     vector_id: int
     distance: float                        # Cosine distance from query song
     similarity: float                      # Cosine similarity = 1 - distance
-    vector: np.ndarray                     # Feature embedding (e.g. 19-dim)
+    vector: Optional[np.ndarray] = None    # Feature embedding (optional)
     title: str = "Unknown Title"
     artist: str = "Unknown Artist"
 
@@ -89,7 +89,8 @@ class FAIAgentState:
         self.selected_songs.append(song)
         self.selected_track_ids.add(song.track_id)
         self.artist_counts[song.artist] = self.artist_counts.get(song.artist, 0) + 1
-        self.selected_vectors.append(np.asarray(song.vector, dtype=np.float32))
+        if song.vector is not None:
+            self.selected_vectors.append(np.asarray(song.vector, dtype=np.float32))
         self.diagnostics.append(diag)
 
 
@@ -131,10 +132,10 @@ def validate_candidates(
             continue
 
         # Check 3: Corrupt record checks
-        if not c.track_id or c.vector is None or len(c.vector) == 0:
+        if not c.track_id or (c.vector is not None and len(c.vector) == 0):
             stats["removed_corrupt"] += 1
             continue
-        if np.isnan(c.vector).any() or np.isnan(c.similarity):
+        if (c.vector is not None and np.isnan(c.vector).any()) or np.isnan(c.similarity):
             stats["removed_corrupt"] += 1
             continue
 
@@ -200,7 +201,7 @@ def check_candidate_eligibility(
 # 4. MULTI-OBJECTIVE HEURISTIC SCORING (Stage 3)
 
 def calculate_feature_diversity(
-    candidate_vector: np.ndarray,
+    candidate_vector: Optional[np.ndarray],
     stacked_selected: Optional[np.ndarray],
     selected_norms: Optional[np.ndarray]
 ) -> float:
@@ -214,7 +215,7 @@ def calculate_feature_diversity(
     OPTIMIZATION: Uses pre-stacked matrices to avoid redundant np.vstack calls.
     """
 
-    if stacked_selected is None or len(stacked_selected) == 0 :
+    if candidate_vector is None or stacked_selected is None or len(stacked_selected) == 0:
         return 1.0
     
     cand = np.asarray(candidate_vector , dtype=np.float32)

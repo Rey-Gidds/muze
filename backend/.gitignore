@@ -1,0 +1,7 @@
+node_modules
+package-lock.json
+
+# Local binary data files - generated from parquet, fetched from R2 at runtime
+data/vectors.bin
+data/track_ids.bin
+data/tracks_index.usearch
