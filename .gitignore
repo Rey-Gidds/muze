@@ -9,13 +9,8 @@ scaler.joblib
 tracks_index.usearch
 tracks_mapping.parquet
 tracks_metadata.parquet
-fai_layer_flow.txt
-fai_theory_and_viva_guide.txt
 RecommendationPipeline/__pycache__/*
 RecommendationPipeline/tests/*
 pre-processing/__pycache__
 pre-processing/__pycache__/*
 backend/scripts
-benchmark_matrix_stacking.py
-ml_viva_questions.md
-fai_project_report.txt
